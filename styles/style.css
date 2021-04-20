@@ -1,0 +1,143 @@
+html {
+  height: 100%;
+  background-image: linear-gradient(#61ff90, #ff768c);
+  background-repeat: no-repeat;
+  font-family: sans-serif;
+  color: #0f222d;
+  background-size: auto;
+}
+
+.main {
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+}
+
+h1 {
+  text-align: center;
+  color: #fff;
+}
+
+form {
+  background-color: #fff;
+  padding: 15px;
+}
+
+input[type="text"] {
+  width: 310px;
+  height: 30px;
+  outline: 0;
+  border: none;
+  font-size: 1.5em;
+  background: #fff;
+  color: #2f4f4f;
+}
+
+button {
+  font-size: 1.5em;
+  color: #53bdff;
+  background-color: #fff;
+  outline: 0;
+  border: none;
+  width: 50px;
+}
+
+.tasksBoard {
+  background-color: #fff;
+  margin-top: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+  display: block;
+}
+
+ul {
+  list-style: none;
+}
+
+.refs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 2px;
+}
+
+.delButtons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 2px;
+}
+
+.listItem {
+  display: flex;
+  box-sizing: border-box;
+  padding-right: 20px;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid #53bdff;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  font-size: 1.3em;
+  color: #2f4f4f;
+}
+
+a {
+  padding: 5px 7px;
+  float: right;
+  text-align: center;
+  color: #ff6161;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.selected {
+  outline: #53bdff 1px solid;
+}
+
+.delete {
+  height: 20px;
+  width: 20px;
+  background-color: #ff6161;
+  text-align: center;
+  line-height: 18px;
+  border-radius: 2px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.check {
+  width: 20px;
+  height: 20px;
+  margin: 0px 10px;
+}
+
+.todoLabel {
+  max-width: 80%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.draggable {
+  cursor: move;
+  user-select: none;
+}
+
+.placeholder {
+  outline: rgb(97, 241, 68) 1px solid;
+}
+
+@media (max-width: 500px) {
+  .main {
+    margin: auto;
+    width: 100%;
+  }
+  input[type="text"] {
+    width: 80%;
+  }
+  button {
+    width: 10%;
+  }
+}

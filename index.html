@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ToDo-List</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
+    <script defer src="models/todo.js"></script>
+    <script defer src="models/todoList.js"></script>
+    <script defer src="controllers/controller.js"></script>
+    <script defer src="utils/dragndrop.js"></script>
+    <script defer src="index.js"></script>
+  </head>
+
+  <body>
+    <div class="main">
+      <h1>TO-DO LIST</h1>
+
+      <form class="" action="index.html" method="post">
+        <input type="text" placeholder="new task" name="task" />
+        <button type="submit"><strong>ADD</strong></button>
+      </form>
+
+      <div class="tasksBoard">
+        <div class="refs">
+          <a id="all">All</a>
+          <a id="active">Active</a>
+          <a id="completed">Completed</a>
+        </div>
+
+        <div class="list">
+          <ul></ul>
+        </div>
+
+        <div class="delButtons">
+          <a id="rmCompleted">Remove completed</a>
+          <a id="clear">Clear</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
