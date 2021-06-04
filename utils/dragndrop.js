@@ -78,7 +78,7 @@ class DragNDrop {
         // The current order    -> The new order
         // draggingEle          -> nextEle
         // placeholder          -> placeholder
-        // nextEle         -> draggingEle
+        // nextEle              -> draggingEle
         this.swap(nextEle, this.placeholder);
         this.swap(nextEle, this.draggingEle);
         this.todoList.swapTodos(nextEle.id, this.draggingEle.id);
@@ -86,7 +86,11 @@ class DragNDrop {
     }
   }
 
-  mouseUpHandler() {
+  async mouseUpHandler() {
+    if (this.draggingEle) {
+      await this.todoList.genNewOrder(this.draggingEle);
+    }
+
     // Remove the placeholder
     this.placeholder &&
       this.placeholder.parentNode &&

@@ -9,6 +9,7 @@ class TodoList {
       .collection("todos")
       .get()
       .then((querySnapshot) => {
+        this.todos = [];
         querySnapshot.forEach((doc) => {
           let todoDoc = {
             id: doc.id,
@@ -16,7 +17,11 @@ class TodoList {
           };
 
           if (todoDoc) {
-            this.todos.push(new Todo(todoDoc.text, todoDoc.id, todoDoc.isDone));
+            this.todos.push(
+              new Todo(todoDoc.text, todoDoc.id, todoDoc.isDone, todoDoc.order)
+            );
+
+            this.todos.sort((prev, next) => prev.order - next.order);
           }
         });
       });
@@ -25,9 +30,10 @@ class TodoList {
   async addTodo(newTodo) {
     this.todos.push(newTodo);
 
-    db.collection("todos").doc(`${newTodo.id}`).set({
+    await db.collection("todos").doc(`${newTodo.id}`).set({
       text: newTodo.text,
       isDone: newTodo.isDone,
+      order: newTodo.order,
     });
 
     await this.loadTodos();
@@ -39,11 +45,9 @@ class TodoList {
     if (todo) {
       todo.markDone(anotherDone);
 
-      db.collection("todos").doc(`${id}`).update({
+      await db.collection("todos").doc(`${id}`).update({
         isDone: anotherDone,
       });
-
-      await this.loadTodos();
     }
   }
 
@@ -75,16 +79,17 @@ class TodoList {
   }
 
   async removeTodo(id) {
-    db.collection("todos").doc(`${id}`).delete();
+    await db.collection("todos").doc(`${id}`).delete();
     await this.loadTodos();
   }
 
   async removeAll() {
     const allIds = this.todos.map((todo) => String(todo.id));
-
-    allIds.forEach((ids) => {
-      db.collection("todos").doc(`${ids}`).delete();
+    const deleteReqs = allIds.map((id) => {
+      return db.collection("todos").doc(`${id}`).delete();
     });
+
+    await Promise.all(deleteReqs);
 
     await this.loadTodos();
   }
@@ -94,11 +99,42 @@ class TodoList {
       .filter((todo) => todo.isDone)
       .map((todo) => String(todo.id));
 
-    completedIds.forEach((ids) => {
-      db.collection("todos").doc(`${ids}`).delete();
-    });
+    await Promise.all(
+      completedIds.map((ids) => {
+        return db.collection("todos").doc(`${ids}`).delete();
+      })
+    );
 
     await this.loadTodos();
+  }
+
+  async genNewOrder(currentElement) {
+    let newOrder;
+    const indexCur = this.todos.findIndex(
+      (todo) => String(todo.id) === String(currentElement.id)
+    );
+
+    const curEl = this.todos[indexCur];
+    const prevEl = this.todos[indexCur - 1];
+    const nextEl = this.todos[indexCur + 1];
+
+    if (prevEl && nextEl) {
+      this.newOrder = (Number(prevEl.order) + Number(nextEl.order)) / 2;
+    } else if (!prevEl && nextEl) {
+      this.newOrder = Number(nextEl.order) / 2;
+    } else if (prevEl && !nextEl) {
+      this.newOrder = Number(prevEl.order) + 1;
+    }
+
+    if (curEl) {
+      curEl.setOrder(String(this.newOrder));
+    }
+
+    db.collection("todos")
+      .doc(`${curEl.id}`)
+      .update({
+        order: String(this.newOrder),
+      });
   }
 
   async swapTodos(idA, idB) {
@@ -115,9 +151,18 @@ class TodoList {
         this.todos[indexB],
         this.todos[indexA],
       ];
-
-      await apiRequest("PUT", "todos", JSON.stringify(this.todos));
-      await this.loadTodos();
     }
+  }
+
+  getOrderOnCreate() {
+    let freshOrder;
+    if (this.todos.length === 0) {
+      freshOrder = 1;
+    } else {
+      const index = this.todos.length - 1;
+      const lastEl = this.todos[index];
+      freshOrder = Number(lastEl.order) + 1;
+    }
+    return String(freshOrder);
   }
 }
