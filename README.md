@@ -7,7 +7,6 @@
 - Checkbox for marking completed tasks.
 - Delete one task, delete only completed tasks and clear all To-Do List.
 - Drag'n'drop for tasks.
-- Use Firestore Database for save current To-Do List.
 
 # Tech
 
@@ -16,7 +15,7 @@ This To-Do application using next technologies:
 - HTML
 - CSS
 - JavaScript
-- Firestore Database (Google)
+- Google Firebase
 - Git-Bash (Terminal)
 
 # To launch the app's frontend, you need to:
